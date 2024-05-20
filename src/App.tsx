@@ -10,8 +10,23 @@ interface Weather {
   sunset: string;
 }
 
+interface ForecastDay {
+  date: string;
+  day: {
+    maxtemp_c: number;
+    maxtemp_f: number;
+    mintemp_c: number;
+    mintemp_f: number;
+    condition: {
+      text: string;
+      icon: string;
+    };
+  };
+}
+
 const App: React.FC = () => {
   const [weather, setWeather] = useState<Weather | null>(null);
+  const [forecast, setForecast] = useState<ForecastDay[] | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [isCelsius, setIsCelsius] = useState(true);
 
@@ -27,6 +42,7 @@ const App: React.FC = () => {
           sunrise: data.forecast.forecastday[0].astro.sunrise,
           sunset: data.forecast.forecastday[0].astro.sunset,
         });
+        setForecast(data.forecast.forecastday);
       } catch (error) {
         console.error("Error fetching weather:", error);
         setError("Failed to fetch weather data. Please try again later.");
@@ -79,6 +95,28 @@ const App: React.FC = () => {
             <p>Humidity: {weather.humidity}%</p>
             <p>Sunrise: {weather.sunrise}</p>
             <p>Sunset: {weather.sunset}</p>
+            <h2 className="text-2xl font-bold mt-8 mb-4">5-Day Forecast</h2>
+            <div>
+              {forecast?.map((day) => (
+                <div
+                  key={day.date}
+                  className="mb-4 p-4 border rounded shadow-sm"
+                >
+                  <p className="font-bold">{day.date}</p>
+                  <p>
+                    {isCelsius ? day.day.maxtemp_c : day.day.maxtemp_f}°
+                    {isCelsius ? "C" : "F"} /{" "}
+                    {isCelsius ? day.day.mintemp_c : day.day.mintemp_f}°
+                    {isCelsius ? "C" : "F"}
+                  </p>
+                  <p>{day.day.condition.text}</p>
+                  <img
+                    src={day.day.condition.icon}
+                    alt={day.day.condition.text}
+                  />
+                </div>
+              ))}
+            </div>
           </div>
         ) : (
           <p>Loading weather data...</p>

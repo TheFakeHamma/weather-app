@@ -1,9 +1,11 @@
-const API_KEY = '691446039335478b8e9171804242005';
-const BASE_URL = 'https://api.weatherapi.com/v1';
+const API_KEY = "691446039335478b8e9171804242005";
+const BASE_URL = "https://api.weatherapi.com/v1";
 
 export const fetchWeather = async (location: string) => {
   try {
-    const response = await fetch(`${BASE_URL}/forecast.json?key=${API_KEY}&q=${location}&days=1&aqi=no&alerts=no`);
+    const response = await fetch(
+      `${BASE_URL}/forecast.json?key=${API_KEY}&q=${location}&days=5&aqi=no&alerts=no`
+    );
     if (!response.ok) {
       throw new Error(`Failed to fetch weather data: ${response.statusText}`);
     }
