@@ -12,11 +12,12 @@ interface Weather {
 
 const App: React.FC = () => {
   const [weather, setWeather] = useState<Weather | null>(null);
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    const getWeather = async () => {
+    const getWeather = async (latitude: number, longitude: number) => {
       try {
-        const data = await fetchWeather("auto:ip");
+        const data = await fetchWeather(`${latitude},${longitude}`);
         setWeather({
           temp_c: data.current.temp_c,
           temp_f: data.current.temp_f,
@@ -27,17 +28,35 @@ const App: React.FC = () => {
         });
       } catch (error) {
         console.error("Error fetching weather:", error);
+        setError("Failed to fetch weather data. Please try again later.");
       }
     };
 
-    getWeather();
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(
+        (position) => {
+          console.log("Geolocation position:", position);
+          getWeather(position.coords.latitude, position.coords.longitude);
+        },
+        (error) => {
+          console.error("Error getting geolocation:", error);
+          setError(
+            "Failed to get your location. Please allow location access and refresh the page."
+          );
+        }
+      );
+    } else {
+      setError("Geolocation is not supported by this browser.");
+    }
   }, []);
 
   return (
     <div className="min-h-screen bg-gray-100 flex flex-col justify-center items-center">
       <header className="text-4xl font-bold mb-8">Weather App</header>
       <main className="bg-white p-6 rounded-lg shadow-lg w-full max-w-md">
-        {weather ? (
+        {error ? (
+          <p className="text-red-500">{error}</p>
+        ) : weather ? (
           <div>
             <p>
               Temperature: {weather.temp_c}°C / {weather.temp_f}°F
