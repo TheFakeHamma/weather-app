@@ -18,9 +18,16 @@ const DetailedForecast: React.FC<DetailedForecastProps> = ({
   hourly,
   isCelsius,
 }) => {
+  const currentTime = new Date().getHours();
+
+  const filteredHourly = hourly.filter((hour) => {
+    const hourTime = new Date(hour.time).getHours();
+    return hourTime >= currentTime;
+  });
+
   return (
     <div>
-      {hourly.map((hour) => (
+      {filteredHourly.map((hour) => (
         <div key={hour.time} className="mb-4 p-4 border rounded shadow-sm">
           <p className="font-bold">{hour.time.split(" ")[1]}</p>
           <p>
