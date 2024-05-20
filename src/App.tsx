@@ -1,5 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { fetchWeather } from "./api/weather";
+import CurrentWeather from "./components/CurrentWeather";
+import Forecast from "./components/Forecast";
+import DetailedForecast from "./components/DetailedForecast";
 
 interface Weather {
   temp_c: number;
@@ -40,6 +43,7 @@ const App: React.FC = () => {
   const [forecast, setForecast] = useState<ForecastDay[] | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [isCelsius, setIsCelsius] = useState(true);
+  const [activeTab, setActiveTab] = useState("today");
 
   useEffect(() => {
     const getWeather = async (latitude: number, longitude: number) => {
@@ -88,67 +92,64 @@ const App: React.FC = () => {
       <main className="bg-white p-6 rounded-lg shadow-lg w-full max-w-md">
         {error ? (
           <p className="text-red-500">{error}</p>
-        ) : weather ? (
+        ) : weather && forecast ? (
           <div>
-            <div className="flex justify-between items-center mb-4">
-              <p>
-                Temperature: {isCelsius ? weather.temp_c : weather.temp_f}°
-                {isCelsius ? "C" : "F"}
-              </p>
-              <button
-                onClick={toggleTemperatureUnit}
-                className="px-4 py-2 bg-blue-500 text-white rounded"
-              >
-                Switch to {isCelsius ? "Fahrenheit" : "Celsius"}
-              </button>
-            </div>
-            <p>Wind: {weather.wind_kph} kph</p>
-            <p>Humidity: {weather.humidity}%</p>
-            <p>Sunrise: {weather.sunrise}</p>
-            <p>Sunset: {weather.sunset}</p>
-            <h2 className="text-2xl font-bold mt-8 mb-4">5-Day Forecast</h2>
-            <div>
-              {forecast?.map((day) => (
-                <div
-                  key={day.date}
-                  className="mb-4 p-4 border rounded shadow-sm"
+            <CurrentWeather
+              temp={isCelsius ? weather.temp_c : weather.temp_f}
+              isCelsius={isCelsius}
+              wind={weather.wind_kph}
+              humidity={weather.humidity}
+              sunrise={weather.sunrise}
+              sunset={weather.sunset}
+              onToggleUnit={toggleTemperatureUnit}
+            />
+            <div className="mt-8">
+              <div className="flex justify-center space-x-4">
+                <button
+                  onClick={() => setActiveTab("today")}
+                  className={`px-4 py-2 ${
+                    activeTab === "today"
+                      ? "bg-blue-500 text-white"
+                      : "bg-gray-200"
+                  }`}
                 >
-                  <p className="font-bold">{day.date}</p>
-                  <p>
-                    {isCelsius ? day.day.maxtemp_c : day.day.maxtemp_f}°
-                    {isCelsius ? "C" : "F"} /{" "}
-                    {isCelsius ? day.day.mintemp_c : day.day.mintemp_f}°
-                    {isCelsius ? "C" : "F"}
-                  </p>
-                  <p>{day.day.condition.text}</p>
-                  <img
-                    src={day.day.condition.icon}
-                    alt={day.day.condition.text}
-                  />
-                </div>
-              ))}
-            </div>
-            <h2 className="text-2xl font-bold mt-8 mb-4">
-              Today's Detailed Forecast
-            </h2>
-            <div>
-              {forecast &&
-                forecast[0].hour.map((hour) => (
-                  <div
-                    key={hour.time}
-                    className="mb-4 p-4 border rounded shadow-sm"
-                  >
-                    <p className="font-bold">{hour.time.split(" ")[1]}</p>
-                    <p>
-                      Temp: {isCelsius ? hour.temp_c : hour.temp_f}°
-                      {isCelsius ? "C" : "F"}
-                    </p>
-                    <p>Wind: {hour.wind_kph} kph</p>
-                    <p>Humidity: {hour.humidity}%</p>
-                    <p>{hour.condition.text}</p>
-                    <img src={hour.condition.icon} alt={hour.condition.text} />
-                  </div>
-                ))}
+                  Today
+                </button>
+                <button
+                  onClick={() => setActiveTab("forecast")}
+                  className={`px-4 py-2 ${
+                    activeTab === "forecast"
+                      ? "bg-blue-500 text-white"
+                      : "bg-gray-200"
+                  }`}
+                >
+                  5-Day Forecast
+                </button>
+              </div>
+              {activeTab === "today" ? (
+                <DetailedForecast
+                  hourly={forecast[0].hour.map((hour) => ({
+                    time: hour.time,
+                    temp: isCelsius ? hour.temp_c : hour.temp_f,
+                    wind: hour.wind_kph,
+                    humidity: hour.humidity,
+                    condition: hour.condition.text,
+                    icon: hour.condition.icon,
+                  }))}
+                  isCelsius={isCelsius}
+                />
+              ) : (
+                <Forecast
+                  forecast={forecast.map((day) => ({
+                    date: day.date,
+                    maxtemp: isCelsius ? day.day.maxtemp_c : day.day.maxtemp_f,
+                    mintemp: isCelsius ? day.day.mintemp_c : day.day.mintemp_f,
+                    condition: day.day.condition.text,
+                    icon: day.day.condition.icon,
+                  }))}
+                  isCelsius={isCelsius}
+                />
+              )}
             </div>
           </div>
         ) : (
