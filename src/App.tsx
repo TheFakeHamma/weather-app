@@ -22,6 +22,17 @@ interface ForecastDay {
       icon: string;
     };
   };
+  hour: {
+    time: string;
+    temp_c: number;
+    temp_f: number;
+    wind_kph: number;
+    humidity: number;
+    condition: {
+      text: string;
+      icon: string;
+    };
+  }[];
 }
 
 const App: React.FC = () => {
@@ -116,6 +127,28 @@ const App: React.FC = () => {
                   />
                 </div>
               ))}
+            </div>
+            <h2 className="text-2xl font-bold mt-8 mb-4">
+              Today's Detailed Forecast
+            </h2>
+            <div>
+              {forecast &&
+                forecast[0].hour.map((hour) => (
+                  <div
+                    key={hour.time}
+                    className="mb-4 p-4 border rounded shadow-sm"
+                  >
+                    <p className="font-bold">{hour.time.split(" ")[1]}</p>
+                    <p>
+                      Temp: {isCelsius ? hour.temp_c : hour.temp_f}°
+                      {isCelsius ? "C" : "F"}
+                    </p>
+                    <p>Wind: {hour.wind_kph} kph</p>
+                    <p>Humidity: {hour.humidity}%</p>
+                    <p>{hour.condition.text}</p>
+                    <img src={hour.condition.icon} alt={hour.condition.text} />
+                  </div>
+                ))}
             </div>
           </div>
         ) : (
