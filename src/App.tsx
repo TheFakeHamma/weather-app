@@ -13,6 +13,7 @@ interface Weather {
 const App: React.FC = () => {
   const [weather, setWeather] = useState<Weather | null>(null);
   const [error, setError] = useState<string | null>(null);
+  const [isCelsius, setIsCelsius] = useState(true);
 
   useEffect(() => {
     const getWeather = async (latitude: number, longitude: number) => {
@@ -50,6 +51,10 @@ const App: React.FC = () => {
     }
   }, []);
 
+  const toggleTemperatureUnit = () => {
+    setIsCelsius(!isCelsius);
+  };
+
   return (
     <div className="min-h-screen bg-gray-100 flex flex-col justify-center items-center">
       <header className="text-4xl font-bold mb-8">Weather App</header>
@@ -58,9 +63,18 @@ const App: React.FC = () => {
           <p className="text-red-500">{error}</p>
         ) : weather ? (
           <div>
-            <p>
-              Temperature: {weather.temp_c}°C / {weather.temp_f}°F
-            </p>
+            <div className="flex justify-between items-center mb-4">
+              <p>
+                Temperature: {isCelsius ? weather.temp_c : weather.temp_f}°
+                {isCelsius ? "C" : "F"}
+              </p>
+              <button
+                onClick={toggleTemperatureUnit}
+                className="px-4 py-2 bg-blue-500 text-white rounded"
+              >
+                Switch to {isCelsius ? "Fahrenheit" : "Celsius"}
+              </button>
+            </div>
             <p>Wind: {weather.wind_kph} kph</p>
             <p>Humidity: {weather.humidity}%</p>
             <p>Sunrise: {weather.sunrise}</p>
