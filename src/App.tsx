@@ -139,7 +139,7 @@ const App: React.FC = () => {
                 <div className="flex justify-center space-x-4">
                   <button
                     onClick={() => setActiveTab("today")}
-                    className={`px-4 py-2 ${
+                    className={`px-4 py-2 rounded-full ${
                       activeTab === "today"
                         ? "bg-blue-500 text-white"
                         : "bg-gray-200"
@@ -149,7 +149,7 @@ const App: React.FC = () => {
                   </button>
                   <button
                     onClick={() => setActiveTab("forecast")}
-                    className={`px-4 py-2 ${
+                    className={`px-4 py-2 rounded-full ${
                       activeTab === "forecast"
                         ? "bg-blue-500 text-white"
                         : "bg-gray-200"

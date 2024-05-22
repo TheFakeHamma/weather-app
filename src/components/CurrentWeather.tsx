@@ -27,7 +27,7 @@ const CurrentWeather: React.FC<CurrentWeatherProps> = ({
         </p>
         <button
           onClick={onToggleUnit}
-          className="px-4 py-2 bg-blue-500 text-white rounded"
+          className="px-4 py-2 bg-blue-500 text-white rounded-full"
         >
           Switch to {isCelsius ? "Fahrenheit" : "Celsius"}
         </button>
