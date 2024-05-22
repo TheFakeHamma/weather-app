@@ -94,12 +94,18 @@ const App: React.FC = () => {
     setIsCelsius(!isCelsius);
   };
 
+  const fahrenheitToCelsius = (temp_f: number) => {
+    return ((temp_f - 32) * 5) / 9;
+  };
+
   const getBackgroundImage = () => {
     if (weather) {
-      const temp = isCelsius ? weather.temp_c : weather.temp_f;
-      if (temp > 30) {
+      const tempInCelsius = isCelsius
+        ? weather.temp_c
+        : fahrenheitToCelsius(weather.temp_f);
+      if (tempInCelsius > 30) {
         return "images/hot.jpg";
-      } else if (temp < 10) {
+      } else if (tempInCelsius < 10) {
         return "images/cold.jpg";
       } else {
         return "images/moderate.jpg";
