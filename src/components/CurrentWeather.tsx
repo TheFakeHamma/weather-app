@@ -20,7 +20,7 @@ const CurrentWeather: React.FC<CurrentWeatherProps> = ({
   onToggleUnit,
 }) => {
   return (
-    <div className="bg-white p-4 rounded-lg shadow-lg text-gray-800">
+    <div className="bg-white p-4 rounded-lg shadow-lg text-gray-800 w-full">
       <div className="flex justify-between items-center mb-4">
         <p className="text-xl font-bold">
           Temperature: {temp}°{isCelsius ? "C" : "F"}

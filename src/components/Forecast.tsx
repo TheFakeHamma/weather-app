@@ -34,7 +34,7 @@ const Forecast: React.FC<ForecastProps> = ({ forecast, isCelsius }) => {
   };
 
   return (
-    <div className="relative">
+    <div className="relative w-full">
       <div className="mb-4 p-4 border rounded shadow-sm relative flex items-center justify-center bg-white">
         {currentIndex > 0 && (
           <button

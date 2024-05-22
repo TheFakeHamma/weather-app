@@ -128,12 +128,12 @@ const App: React.FC = () => {
           backgroundImage: `url(${getBackgroundImage()})`,
         }}
       ></div>
-      <div className="relative z-10 flex flex-col justify-center items-center min-h-screen bg-black bg-opacity-50">
+      <div className="relative z-10 flex flex-col justify-center items-center min-h-screen bg-black bg-opacity-50 w-full sm:w-96">
         <header className="text-4xl font-bold mb-8 text-white">
           {weather ? weather.location.name : "Weather App"}
         </header>
         <SearchBar onSearch={handleSearch} />
-        <main className="bg-white p-6 rounded-lg shadow-lg w-full max-w-md">
+        <main className="bg-white p-6 rounded-lg shadow-lg w-full">
           {error ? (
             <p className="text-red-500">{error}</p>
           ) : weather && forecast ? (
@@ -148,7 +148,7 @@ const App: React.FC = () => {
                 onToggleUnit={toggleTemperatureUnit}
               />
               <div className="mt-8">
-                <div className="flex justify-center space-x-4">
+                <div className="flex justify-center space-x-4 mb-4">
                   <button
                     onClick={() => setActiveTab("today")}
                     className={`px-4 py-2 rounded-full ${
