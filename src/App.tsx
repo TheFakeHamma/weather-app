@@ -94,77 +94,105 @@ const App: React.FC = () => {
     setIsCelsius(!isCelsius);
   };
 
+  const getBackgroundImage = () => {
+    if (weather) {
+      const temp = isCelsius ? weather.temp_c : weather.temp_f;
+      if (temp > 30) {
+        return "images/hot.jpg";
+      } else if (temp < 10) {
+        return "images/cold.jpg";
+      } else {
+        return "images/moderate.jpg";
+      }
+    }
+    return "images/default.jpg";
+  };
+
   return (
-    <div className="min-h-screen bg-gray-100 flex flex-col justify-center items-center">
-      <header className="text-4xl font-bold mb-8">Weather App</header>
-      <SearchBar onSearch={handleSearch} />
-      <main className="bg-white p-6 rounded-lg shadow-lg w-full max-w-md">
-        {error ? (
-          <p className="text-red-500">{error}</p>
-        ) : weather && forecast ? (
-          <div>
-            <CurrentWeather
-              temp={isCelsius ? weather.temp_c : weather.temp_f}
-              isCelsius={isCelsius}
-              wind={weather.wind_kph}
-              humidity={weather.humidity}
-              sunrise={weather.sunrise}
-              sunset={weather.sunset}
-              onToggleUnit={toggleTemperatureUnit}
-            />
-            <div className="mt-8">
-              <div className="flex justify-center space-x-4">
-                <button
-                  onClick={() => setActiveTab("today")}
-                  className={`px-4 py-2 ${
-                    activeTab === "today"
-                      ? "bg-blue-500 text-white"
-                      : "bg-gray-200"
-                  }`}
-                >
-                  Today
-                </button>
-                <button
-                  onClick={() => setActiveTab("forecast")}
-                  className={`px-4 py-2 ${
-                    activeTab === "forecast"
-                      ? "bg-blue-500 text-white"
-                      : "bg-gray-200"
-                  }`}
-                >
-                  5-Day Forecast
-                </button>
+    <div className="relative min-h-screen flex flex-col justify-center items-center">
+      <div
+        className="absolute inset-0 bg-cover bg-center filter blur-lg"
+        style={{
+          backgroundImage: `url(${getBackgroundImage()})`,
+        }}
+      ></div>
+      <div className="relative z-10 flex flex-col justify-center items-center min-h-screen bg-black bg-opacity-50">
+        <header className="text-4xl font-bold mb-8 text-white">
+          Weather App
+        </header>
+        <SearchBar onSearch={handleSearch} />
+        <main className="bg-white p-6 rounded-lg shadow-lg w-full max-w-md">
+          {error ? (
+            <p className="text-red-500">{error}</p>
+          ) : weather && forecast ? (
+            <div>
+              <CurrentWeather
+                temp={isCelsius ? weather.temp_c : weather.temp_f}
+                isCelsius={isCelsius}
+                wind={weather.wind_kph}
+                humidity={weather.humidity}
+                sunrise={weather.sunrise}
+                sunset={weather.sunset}
+                onToggleUnit={toggleTemperatureUnit}
+              />
+              <div className="mt-8">
+                <div className="flex justify-center space-x-4">
+                  <button
+                    onClick={() => setActiveTab("today")}
+                    className={`px-4 py-2 ${
+                      activeTab === "today"
+                        ? "bg-blue-500 text-white"
+                        : "bg-gray-200"
+                    }`}
+                  >
+                    Today
+                  </button>
+                  <button
+                    onClick={() => setActiveTab("forecast")}
+                    className={`px-4 py-2 ${
+                      activeTab === "forecast"
+                        ? "bg-blue-500 text-white"
+                        : "bg-gray-200"
+                    }`}
+                  >
+                    5-Day Forecast
+                  </button>
+                </div>
+                {activeTab === "today" ? (
+                  <DetailedForecast
+                    hourly={forecast[0].hour.map((hour) => ({
+                      time: hour.time,
+                      temp: isCelsius ? hour.temp_c : hour.temp_f,
+                      wind: hour.wind_kph,
+                      humidity: hour.humidity,
+                      condition: hour.condition.text,
+                      icon: hour.condition.icon,
+                    }))}
+                    isCelsius={isCelsius}
+                  />
+                ) : (
+                  <Forecast
+                    forecast={forecast.map((day) => ({
+                      date: day.date,
+                      maxtemp: isCelsius
+                        ? day.day.maxtemp_c
+                        : day.day.maxtemp_f,
+                      mintemp: isCelsius
+                        ? day.day.mintemp_c
+                        : day.day.mintemp_f,
+                      condition: day.day.condition.text,
+                      icon: day.day.condition.icon,
+                    }))}
+                    isCelsius={isCelsius}
+                  />
+                )}
               </div>
-              {activeTab === "today" ? (
-                <DetailedForecast
-                  hourly={forecast[0].hour.map((hour) => ({
-                    time: hour.time,
-                    temp: isCelsius ? hour.temp_c : hour.temp_f,
-                    wind: hour.wind_kph,
-                    humidity: hour.humidity,
-                    condition: hour.condition.text,
-                    icon: hour.condition.icon,
-                  }))}
-                  isCelsius={isCelsius}
-                />
-              ) : (
-                <Forecast
-                  forecast={forecast.map((day) => ({
-                    date: day.date,
-                    maxtemp: isCelsius ? day.day.maxtemp_c : day.day.maxtemp_f,
-                    mintemp: isCelsius ? day.day.mintemp_c : day.day.mintemp_f,
-                    condition: day.day.condition.text,
-                    icon: day.day.condition.icon,
-                  }))}
-                  isCelsius={isCelsius}
-                />
-              )}
             </div>
-          </div>
-        ) : (
-          <p>Loading weather data...</p>
-        )}
-      </main>
+          ) : (
+            <p>Loading weather data...</p>
+          )}
+        </main>
+      </div>
     </div>
   );
 };
