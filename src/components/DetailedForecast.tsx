@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 
 interface HourlyForecast {
   time: string;
@@ -25,20 +25,51 @@ const DetailedForecast: React.FC<DetailedForecastProps> = ({
     return hourTime >= currentTime;
   });
 
+  const [currentIndex, setCurrentIndex] = useState(0);
+
+  const handlePrev = () => {
+    setCurrentIndex((prevIndex) =>
+      prevIndex > 0 ? prevIndex - 1 : filteredHourly.length - 1
+    );
+  };
+
+  const handleNext = () => {
+    setCurrentIndex((prevIndex) =>
+      prevIndex < filteredHourly.length - 1 ? prevIndex + 1 : 0
+    );
+  };
+
   return (
     <div>
-      {filteredHourly.map((hour) => (
-        <div key={hour.time} className="mb-4 p-4 border rounded shadow-sm">
-          <p className="font-bold">{hour.time.split(" ")[1]}</p>
-          <p>
-            Temp: {hour.temp}°{isCelsius ? "C" : "F"}
-          </p>
-          <p>Wind: {hour.wind} kph</p>
-          <p>Humidity: {hour.humidity}%</p>
-          <p>{hour.condition}</p>
-          <img src={hour.icon} alt={hour.condition} />
-        </div>
-      ))}
+      <div className="mb-4 p-4 border rounded shadow-sm">
+        <p className="font-bold">
+          {filteredHourly[currentIndex].time.split(" ")[1]}
+        </p>
+        <p>
+          Temp: {filteredHourly[currentIndex].temp}°{isCelsius ? "C" : "F"}
+        </p>
+        <p>Wind: {filteredHourly[currentIndex].wind} kph</p>
+        <p>Humidity: {filteredHourly[currentIndex].humidity}%</p>
+        <p>{filteredHourly[currentIndex].condition}</p>
+        <img
+          src={filteredHourly[currentIndex].icon}
+          alt={filteredHourly[currentIndex].condition}
+        />
+      </div>
+      <div className="flex justify-between mt-4">
+        <button
+          onClick={handlePrev}
+          className="px-4 py-2 bg-blue-500 text-white rounded"
+        >
+          Previous
+        </button>
+        <button
+          onClick={handleNext}
+          className="px-4 py-2 bg-blue-500 text-white rounded"
+        >
+          Next
+        </button>
+      </div>
     </div>
   );
 };
