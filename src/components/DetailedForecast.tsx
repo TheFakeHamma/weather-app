@@ -46,7 +46,7 @@ const DetailedForecast: React.FC<DetailedForecastProps> = ({
 
   return (
     <div className="relative">
-      <div className="mb-4 p-4 border rounded shadow-sm relative flex items-center justify-center">
+      <div className="mb-4 p-4 border rounded shadow-sm relative flex items-center justify-center bg-white">
         {currentIndex > 0 && (
           <button
             onClick={handlePrev}
@@ -56,7 +56,7 @@ const DetailedForecast: React.FC<DetailedForecastProps> = ({
           </button>
         )}
         <div className="text-center mx-10">
-          <p className="font-bold">
+          <p className="font-bold text-xl">
             {filteredHourly[currentIndex].time.split(" ")[1]}
           </p>
           <p>
@@ -68,6 +68,7 @@ const DetailedForecast: React.FC<DetailedForecastProps> = ({
           <img
             src={filteredHourly[currentIndex].icon}
             alt={filteredHourly[currentIndex].condition}
+            className="mx-auto"
           />
         </div>
         {currentIndex < filteredHourly.length - 1 && (

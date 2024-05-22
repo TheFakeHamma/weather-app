@@ -35,7 +35,7 @@ const Forecast: React.FC<ForecastProps> = ({ forecast, isCelsius }) => {
 
   return (
     <div className="relative">
-      <div className="mb-4 p-4 border rounded shadow-sm relative flex items-center justify-center">
+      <div className="mb-4 p-4 border rounded shadow-sm relative flex items-center justify-center bg-white">
         {currentIndex > 0 && (
           <button
             onClick={handlePrev}
@@ -45,7 +45,7 @@ const Forecast: React.FC<ForecastProps> = ({ forecast, isCelsius }) => {
           </button>
         )}
         <div className="text-center mx-10">
-          <p className="font-bold">{forecast[currentIndex].date}</p>
+          <p className="font-bold text-xl">{forecast[currentIndex].date}</p>
           <p>
             {forecast[currentIndex].maxtemp}°{isCelsius ? "C" : "F"} /{" "}
             {forecast[currentIndex].mintemp}°{isCelsius ? "C" : "F"}
@@ -54,6 +54,7 @@ const Forecast: React.FC<ForecastProps> = ({ forecast, isCelsius }) => {
           <img
             src={forecast[currentIndex].icon}
             alt={forecast[currentIndex].condition}
+            className="mx-auto"
           />
         </div>
         {currentIndex < forecast.length - 1 && (

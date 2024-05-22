@@ -20,9 +20,9 @@ const CurrentWeather: React.FC<CurrentWeatherProps> = ({
   onToggleUnit,
 }) => {
   return (
-    <div>
+    <div className="bg-white p-4 rounded-lg shadow-lg text-gray-800">
       <div className="flex justify-between items-center mb-4">
-        <p>
+        <p className="text-xl font-bold">
           Temperature: {temp}°{isCelsius ? "C" : "F"}
         </p>
         <button
@@ -32,10 +32,20 @@ const CurrentWeather: React.FC<CurrentWeatherProps> = ({
           Switch to {isCelsius ? "Fahrenheit" : "Celsius"}
         </button>
       </div>
-      <p>Wind: {wind} kph</p>
-      <p>Humidity: {humidity}%</p>
-      <p>Sunrise: {sunrise}</p>
-      <p>Sunset: {sunset}</p>
+      <div className="space-y-2">
+        <p className="text-lg">
+          <span className="font-semibold">Wind:</span> {wind} kph
+        </p>
+        <p className="text-lg">
+          <span className="font-semibold">Humidity:</span> {humidity}%
+        </p>
+        <p className="text-lg">
+          <span className="font-semibold">Sunrise:</span> {sunrise}
+        </p>
+        <p className="text-lg">
+          <span className="font-semibold">Sunset:</span> {sunset}
+        </p>
+      </div>
     </div>
   );
 };
