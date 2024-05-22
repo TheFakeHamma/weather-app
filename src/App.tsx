@@ -12,6 +12,9 @@ interface Weather {
   humidity: number;
   sunrise: string;
   sunset: string;
+  location: {
+    name: string;
+  };
 }
 
 interface ForecastDay {
@@ -56,6 +59,9 @@ const App: React.FC = () => {
         humidity: data.current.humidity,
         sunrise: data.forecast.forecastday[0].astro.sunrise,
         sunset: data.forecast.forecastday[0].astro.sunset,
+        location: {
+          name: data.location.name,
+        },
       });
       setForecast(data.forecast.forecastday);
       setError(null);
@@ -124,7 +130,7 @@ const App: React.FC = () => {
       ></div>
       <div className="relative z-10 flex flex-col justify-center items-center min-h-screen bg-black bg-opacity-50">
         <header className="text-4xl font-bold mb-8 text-white">
-          Weather App
+          {weather ? weather.location.name : "Weather App"}
         </header>
         <SearchBar onSearch={handleSearch} />
         <main className="bg-white p-6 rounded-lg shadow-lg w-full max-w-md">
