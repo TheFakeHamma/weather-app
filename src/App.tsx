@@ -129,7 +129,7 @@ const App: React.FC = () => {
         }}
       ></div>
       <div className="relative z-10 flex flex-col justify-center items-center min-h-screen bg-black bg-opacity-50 w-full sm:w-96">
-        <header className="text-4xl font-bold mb-8 text-white">
+        <header className="text-4xl font-bold mb-8 text-white mt-4">
           {weather ? weather.location.name : "Weather App"}
         </header>
         <SearchBar onSearch={handleSearch} />
