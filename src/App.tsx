@@ -172,19 +172,24 @@ const App: React.FC = () => {
                 </div>
                 {activeTab === "today" ? (
                   <DetailedForecast
-                    hourly={forecast[0].hour.map((hour) => ({
-                      time: hour.time,
-                      temp: isCelsius ? hour.temp_c : hour.temp_f,
-                      wind: hour.wind_kph,
-                      humidity: hour.humidity,
-                      condition: hour.condition.text,
-                      icon: hour.condition.icon,
-                    }))}
+                    hourly={forecast[0].hour
+                      .filter((hour) => {
+                        const hourTime = new Date(hour.time).getHours();
+                        return hourTime > new Date().getHours();
+                      })
+                      .map((hour) => ({
+                        time: hour.time,
+                        temp: isCelsius ? hour.temp_c : hour.temp_f,
+                        wind: hour.wind_kph,
+                        humidity: hour.humidity,
+                        condition: hour.condition.text,
+                        icon: hour.condition.icon,
+                      }))}
                     isCelsius={isCelsius}
                   />
                 ) : (
                   <Forecast
-                    forecast={forecast.map((day) => ({
+                    forecast={forecast.slice(1).map((day) => ({
                       date: day.date,
                       maxtemp: isCelsius
                         ? day.day.maxtemp_c

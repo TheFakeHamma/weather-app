@@ -23,13 +23,6 @@ const DetailedForecast: React.FC<DetailedForecastProps> = ({
   hourly,
   isCelsius,
 }) => {
-  const currentTime = new Date().getHours();
-
-  const filteredHourly = hourly.filter((hour) => {
-    const hourTime = new Date(hour.time).getHours();
-    return hourTime >= currentTime;
-  });
-
   const [currentIndex, setCurrentIndex] = useState(0);
 
   const handlePrev = () => {
@@ -39,7 +32,7 @@ const DetailedForecast: React.FC<DetailedForecastProps> = ({
   };
 
   const handleNext = () => {
-    if (currentIndex < filteredHourly.length - 1) {
+    if (currentIndex < hourly.length - 1) {
       setCurrentIndex(currentIndex + 1);
     }
   };
@@ -57,21 +50,21 @@ const DetailedForecast: React.FC<DetailedForecastProps> = ({
         )}
         <div className="text-center mx-10">
           <p className="font-bold text-xl">
-            {filteredHourly[currentIndex].time.split(" ")[1]}
+            {hourly[currentIndex].time.split(" ")[1]}
           </p>
           <p>
-            Temp: {filteredHourly[currentIndex].temp}°{isCelsius ? "C" : "F"}
+            Temp: {hourly[currentIndex].temp}°{isCelsius ? "C" : "F"}
           </p>
-          <p>Wind: {filteredHourly[currentIndex].wind} kph</p>
-          <p>Humidity: {filteredHourly[currentIndex].humidity}%</p>
-          <p>{filteredHourly[currentIndex].condition}</p>
+          <p>Wind: {hourly[currentIndex].wind} kph</p>
+          <p>Humidity: {hourly[currentIndex].humidity}%</p>
+          <p>{hourly[currentIndex].condition}</p>
           <img
-            src={filteredHourly[currentIndex].icon}
-            alt={filteredHourly[currentIndex].condition}
+            src={hourly[currentIndex].icon}
+            alt={hourly[currentIndex].condition}
             className="mx-auto"
           />
         </div>
-        {currentIndex < filteredHourly.length - 1 && (
+        {currentIndex < hourly.length - 1 && (
           <button
             onClick={handleNext}
             className="absolute right-2 top-1/2 transform -translate-y-1/2 bg-black bg-opacity-50 p-3 rounded-full text-white"

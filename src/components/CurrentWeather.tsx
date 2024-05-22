@@ -19,6 +19,8 @@ const CurrentWeather: React.FC<CurrentWeatherProps> = ({
   sunset,
   onToggleUnit,
 }) => {
+  const currentTime = new Date().toLocaleTimeString();
+
   return (
     <div className="bg-white p-4 rounded-lg shadow-lg text-gray-800 w-full">
       <div className="flex justify-between items-center mb-4">
@@ -32,7 +34,10 @@ const CurrentWeather: React.FC<CurrentWeatherProps> = ({
           {isCelsius ? "°F" : "°C"}
         </button>
       </div>
-      <div className="space-y-2">
+      <p className="text-lg">
+        <span className="font-semibold">Current Time:</span> {currentTime}
+      </p>
+      <div className="space-y-2 mt-2">
         <p className="text-lg">
           <span className="font-semibold">Wind:</span> {wind} kph
         </p>
